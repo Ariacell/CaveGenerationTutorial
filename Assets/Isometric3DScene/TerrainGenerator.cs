@@ -29,7 +29,7 @@ public class TerrainGenerator : MonoBehaviour {
         noise = new FastNoise(5983);
         noise.SetNoiseType(FastNoise.NoiseType.Perlin);
 
-        heightMap = GetHeightMap(chunkMap, 5);
+        heightMap = GetHeightMap(chunkMap, 10);
 
 
         for (int x = 0; x < chunkWidth; x++) {
