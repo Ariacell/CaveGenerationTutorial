@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,11 +21,16 @@ public class TerrainGenerator : MonoBehaviour {
     private FastNoise noise;
     private float[,] heightMap;
 
+    private List<BouncingMapUnit> bouncingCubes;
+    private List<BouncingMapUnit> settlingCubes;
+
     // Start is called before the first frame update
     void Start() {
 
         chunkMap = new GameObject[chunkWidth, chunkWidth];
         offset = terrainUnit.GetComponent<Renderer>().bounds.size.x;
+
+        bouncingCubes = new List<BouncingMapUnit>();
 
         noise = new FastNoise(5983);
         noise.SetNoiseType(FastNoise.NoiseType.Perlin);
@@ -34,7 +40,7 @@ public class TerrainGenerator : MonoBehaviour {
 
         for (int x = 0; x < chunkWidth; x++) {
             for (int y = 0; y < chunkWidth; y++) {
-                Vector3 terrainUnitPosition = new Vector3(x * offset, heightMap[x, y], y * offset);
+                Vector3 terrainUnitPosition = new Vector3(x * offset, (float) Math.Round(heightMap[x, y],1), y * offset);
                 chunkMap[x, y] = Instantiate(terrainUnit, terrainUnitPosition, Quaternion.identity);
                 chunkMap[x, y].transform.SetParent(this.transform);
             }
@@ -46,7 +52,22 @@ public class TerrainGenerator : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
+        List<BouncingMapUnit> nextBounceList = new List<BouncingMapUnit>();
+        List<BouncingMapUnit> nextSettlingList = new List<BouncingMapUnit>();
+
+
+        for (int i = 0; i < bouncingCubes.Count; i++) {
+            if (bouncingCubes[i].lifetime < bouncingCubes[i].ttl) {
+                bouncingCubes[i].lifetime += Time.deltaTime;
+                bouncingCubes[i].bouncePos.y = bouncingCubes[i].initPos.y + (float)(bouncingCubes[i].magnitude * Math.Exp(-bouncingCubes[i].lifetime) * Math.Sin(Math.PI * bouncingCubes[i].lifetime));
+                chunkMap[bouncingCubes[i].x, bouncingCubes[i].y].transform.position = bouncingCubes[i].bouncePos;
+                nextBounceList.Add(bouncingCubes[i]);
+            }
+        }
+        bouncingCubes = nextBounceList;
     }
+
+    // private float DecaySine()
 
     private float[,] GetHeightMap(GameObject[,] targetMap, int octaves) {
         float[,] mapToPopulate = new float[chunkMap.GetLength(0), chunkMap.GetLength(1)];
@@ -59,5 +80,46 @@ public class TerrainGenerator : MonoBehaviour {
         }
 
         return mapToPopulate;
+    }
+
+    public void BounceCube(int x, int y, float ttl, float magnitude) {
+        Vector3 pos = chunkMap[x, y].transform.position;
+        bouncingCubes.Add(new BouncingMapUnit(x, y, ttl, magnitude, pos));
+        // chunkMap[x, y].transform.position += new Vector3(pos.x, pos.y + magnitude, pos.z);
+    }
+
+    public void HighlightZone(int sourcePositionX, int sourcePositionY, int radius, Material initialHighlightMat) {
+        for (int x = sourcePositionX - radius; x < sourcePositionX + radius; x++) {
+            for (int y = sourcePositionY - radius; y < sourcePositionY + radius; y++) {
+                if (IsInMapBounds(x, y, chunkMap)) {
+                    chunkMap[x, y].GetComponent<Renderer>().material = initialHighlightMat;
+                }
+            }
+        }
+    }
+    private bool IsInMapBounds(int x, int y, GameObject[,] map) {
+        return (x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1));
+    }
+
+    class BouncingMapUnit {
+        public int x;
+        public int y;
+        public float birthTime;
+        public float ttl;
+        public float lifetime;
+        public float magnitude;
+        public readonly Vector3 initPos;
+        public Vector3 bouncePos;
+
+        public BouncingMapUnit(int x, int y, float ttl, float magnitude, Vector3 pos) {
+            this.x = x;
+            this.y = y;
+            this.birthTime = Time.time;
+            this.lifetime = 0;
+            this.ttl = ttl * (float)(2 * Math.PI);
+            this.magnitude = magnitude;
+            this.initPos = pos;
+            this.bouncePos = pos;
+        }
     }
 }

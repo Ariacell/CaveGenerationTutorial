@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 107658716}
   - component: {fileID: 107658715}
   - component: {fileID: 107658714}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,6 +538,7 @@ GameObject:
   - component: {fileID: 1028292760}
   - component: {fileID: 1028292759}
   - component: {fileID: 1028292758}
+  - component: {fileID: 1028292761}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -560,7 +561,7 @@ MonoBehaviour:
   controller: {fileID: 1028292759}
   playerSpeed: 10
   groundCheck: {fileID: 647974784}
-  groundDistance: 0.4
+  groundDistance: 0.5
   groundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -599,6 +600,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1028292761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028292757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83155840a206c6f449ff25048357c2dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrain: {fileID: 1102786476}
+  bounceCooldown: 2
+  raycastHitConfirmMaterial: {fileID: 2100000, guid: 2eb11b18461c3da44be73745e8fdb3c6,
+    type: 2}
 --- !u!1 &1102786475
 GameObject:
   m_ObjectHideFlags: 0
