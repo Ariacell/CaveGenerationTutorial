@@ -35,7 +35,7 @@ public class RayCastColour : MonoBehaviour {
                 // hit.transform.parent.SendMessage("HighlightZone", ((int)hit.transform.position.x, (int)hit.transform.position.y, 5,  raycastHitConfirmMaterial));
                 terrain.HighlightZone((int)hit.transform.position.x, (int)hit.transform.position.z, 1, raycastHitConfirmMaterial);
                 if (timeSinceBounce > bounceCooldown) {
-                    terrain.BounceCube((int)hit.transform.position.x, (int)hit.transform.position.z, 1f, 1.0f);
+                    terrain.BounceCube((int)hit.transform.position.x, (int)hit.transform.position.z, 1f, 5.0f);
                 }
             }
         }

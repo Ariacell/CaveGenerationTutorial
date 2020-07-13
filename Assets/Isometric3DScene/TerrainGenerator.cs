@@ -13,6 +13,9 @@ public class TerrainGenerator : MonoBehaviour {
     public int chunkWidth = 10; //Chunksize of terrain to load
     public int blockScale = 1; //Scale of the unit of terrain we are using as blocks
     public float maxMapHeight = 10;
+    public float mapAmplitude = 20;
+    public int octaves = 10;
+    public int noiseSeed = 5983;
     /* END PUBLIC UNITY INTERFACE */
 
     private float offset;
@@ -32,17 +35,20 @@ public class TerrainGenerator : MonoBehaviour {
 
         bouncingCubes = new List<BouncingMapUnit>();
 
-        noise = new FastNoise(5983);
+        noise = new FastNoise(noiseSeed);
         noise.SetNoiseType(FastNoise.NoiseType.Perlin);
 
-        heightMap = GetHeightMap(chunkMap, 10);
+        heightMap = GetHeightMap(chunkMap, octaves);
 
 
         for (int x = 0; x < chunkWidth; x++) {
-            for (int y = 0; y < chunkWidth; y++) {
-                Vector3 terrainUnitPosition = new Vector3(x * offset, (float) Math.Round(heightMap[x, y],1), y * offset);
-                chunkMap[x, y] = Instantiate(terrainUnit, terrainUnitPosition, Quaternion.identity);
-                chunkMap[x, y].transform.SetParent(this.transform);
+            for (int z = 0; z < chunkWidth; z++) {
+                Vector3 terrainUnitPosition = new Vector3(
+                    this.transform.position.x + x * offset,
+                    (float) Math.Round(heightMap[x, z],1),
+                    this.transform.position.z + z * offset);
+                chunkMap[x, z] = Instantiate(terrainUnit, terrainUnitPosition, Quaternion.identity);
+                chunkMap[x, z].transform.SetParent(this.transform);
             }
         }
         gameObject.AddComponent<MeshFilter>().mesh = mesh;
@@ -62,6 +68,8 @@ public class TerrainGenerator : MonoBehaviour {
                 bouncingCubes[i].bouncePos.y = bouncingCubes[i].initPos.y + (float)(bouncingCubes[i].magnitude * Math.Exp(-bouncingCubes[i].lifetime) * Math.Sin(Math.PI * bouncingCubes[i].lifetime));
                 chunkMap[bouncingCubes[i].x, bouncingCubes[i].y].transform.position = bouncingCubes[i].bouncePos;
                 nextBounceList.Add(bouncingCubes[i]);
+            } else {
+                chunkMap[bouncingCubes[i].x, bouncingCubes[i].y].transform.position = bouncingCubes[i].initPos;
             }
         }
         bouncingCubes = nextBounceList;
@@ -74,7 +82,7 @@ public class TerrainGenerator : MonoBehaviour {
         for (int oct = 1; oct < octaves+1; oct++) {
             for (int x = 0; x < mapToPopulate.GetLength(0); x++) {
                 for (int y = 0; y < mapToPopulate.GetLength(1); y++) {
-                    mapToPopulate[x, y] += (20/oct)*(noise.GetPerlin((oct)*x,(oct)*y)+1);
+                    mapToPopulate[x, y] += (mapAmplitude/oct)*(noise.GetPerlin((oct)*x,(oct)*y));
                 }
             }
         }
@@ -89,8 +97,8 @@ public class TerrainGenerator : MonoBehaviour {
     }
 
     public void HighlightZone(int sourcePositionX, int sourcePositionY, int radius, Material initialHighlightMat) {
-        for (int x = sourcePositionX - radius; x < sourcePositionX + radius; x++) {
-            for (int y = sourcePositionY - radius; y < sourcePositionY + radius; y++) {
+        for (int x = sourcePositionX - radius; x <= sourcePositionX + radius; x++) {
+            for (int y = sourcePositionY - radius; y <= sourcePositionY + radius; y++) {
                 if (IsInMapBounds(x, y, chunkMap)) {
                     chunkMap[x, y].GetComponent<Renderer>().material = initialHighlightMat;
                 }
