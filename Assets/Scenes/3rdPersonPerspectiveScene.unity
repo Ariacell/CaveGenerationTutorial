@@ -318,7 +318,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1315691825}
   - component: {fileID: 1315691826}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AnimatedPerlin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,11 +351,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebec1015650061f45a6a869dc0899728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationSpeed: 6
+  animationSpeed: 10
   terrainDepth: 80
   terrainWidth: 80
-  mapAmplitude: 5
-  octaves: 10
+  mapAmplitude: 20
+  octaves: 20
   noiseSeed: 23213
 --- !u!1 &1378314839
 GameObject:
@@ -483,6 +483,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSize: 20
   ySize: 20
+  mesh: {fileID: 0}
+  vertices: []
 --- !u!23 &1397117694
 MeshRenderer:
   m_ObjectHideFlags: 0

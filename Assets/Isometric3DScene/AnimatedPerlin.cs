@@ -24,6 +24,7 @@ public class AnimatedPerlin : MonoBehaviour {
     private Mesh mesh;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+    private MeshCollider meshCollider;
 
     void Start() {
         noise = new FastNoise(noiseSeed);
@@ -33,11 +34,14 @@ public class AnimatedPerlin : MonoBehaviour {
         heightMap = new float[terrainWidth, terrainDepth];
 
         meshFilter = this.gameObject.AddComponent<MeshFilter>();
-        // GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         mesh = new Mesh();
         meshFilter.mesh = mesh;
 
         meshRenderer = this.gameObject.AddComponent<MeshRenderer>();
+
+        meshCollider = this.gameObject.AddComponent<MeshCollider>();
+        meshCollider.sharedMesh = mesh;
+
         newVertices = new Vector3[(terrainWidth) * (terrainDepth)];
         newUV = new Vector2[newVertices.Length];
         newTris = new int[(terrainDepth) * (terrainWidth) * 6];
@@ -62,12 +66,12 @@ public class AnimatedPerlin : MonoBehaviour {
         for (int i = 0, ti = 0; i < terrainWidth - 1; i++) {
             for (int j = 0; j < terrainDepth - 1; j++, ti += 6) {
                 newTris[ti] = j + terrainWidth * i;
-                newTris[ti + 1] = j + 1 + terrainWidth*i;
+                newTris[ti + 1] = j + 1 + terrainWidth * i;
                 newTris[ti + 2] = j + (terrainWidth * (i + 1));
 
                 newTris[ti + 3] = j + 1 + terrainWidth * i;
-                newTris[ti + 4] = j + 1 + terrainWidth * (i+1);
-                newTris[ti + 5] = j + terrainWidth * (i+1);
+                newTris[ti + 4] = j + 1 + terrainWidth * (i + 1);
+                newTris[ti + 5] = j + terrainWidth * (i + 1);
             }
         }
 
