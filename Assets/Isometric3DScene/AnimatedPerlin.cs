@@ -38,6 +38,7 @@ public class AnimatedPerlin : MonoBehaviour {
         meshFilter.mesh = mesh;
 
         meshRenderer = this.gameObject.AddComponent<MeshRenderer>();
+        meshRenderer.material = (Material)Resources.Load("Material");
 
         meshCollider = this.gameObject.AddComponent<MeshCollider>();
         meshCollider.sharedMesh = mesh;
