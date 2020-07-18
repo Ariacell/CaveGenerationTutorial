@@ -150,12 +150,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f17c90a37d31cf478e46800f3edb597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationSpeed: 5
+  animationSpeed: 4
   terrainDepth: 50
-  terrainWidth: 40
-  mapAmplitude: 5
+  terrainWidth: 50
+  mapAmplitude: 8
   octaves: 10
-  noiseSeed: 35342
+  noiseSeed: 43593
 --- !u!4 &243673721
 Transform:
   m_ObjectHideFlags: 0

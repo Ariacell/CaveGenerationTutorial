@@ -51,8 +51,8 @@ public class CubeAnimatedPerlin : MonoBehaviour {
         squareTris = new int[squareVertices.Length * 6];
 
         surfaceTris = new int[newVertices.Length * 6];
-        sideTris = new int[newVertices.Length * 6 - 3 * terrainDepth];
-        depthTris = new int[newVertices.Length * 6 - 3 * terrainWidth];
+        sideTris = new int[newVertices.Length * 6 - 6 * terrainDepth];
+        depthTris = new int[newVertices.Length * 6 - 6 * terrainWidth];
 
         newUV = new Vector2[squareVertices.Length];
         newTris = new int[(terrainDepth) * (terrainWidth) * 6];
@@ -74,70 +74,42 @@ public class CubeAnimatedPerlin : MonoBehaviour {
         //     }
         // }
 
-        // for (int i = 0, ti = 0; i < (terrainWidth - 1)*2; i++) {
-        //     for (int j = 0; j < (terrainDepth - 1)*2; j++, ti += 6) {
-        //         squareTris[ti] = j + terrainWidth * i;
-        //         squareTris[ti + 1] = j + 1 + terrainWidth * i;
-        //         squareTris[ti + 2] = j + (terrainWidth * (i + 1));
-
-        //         squareTris[ti + 3] = j + 1 + terrainWidth * i;
-        //         squareTris[ti + 4] = j + 1 + terrainWidth * (i + 1);
-        //         squareTris[ti + 5] = j + terrainWidth * (i + 1);
-        //     }
-        // }
-
-        // squareTris[0] = 0;
-        // squareTris[1] = 2;
-        // squareTris[2] = 1;
-
-        // squareTris[3] = 0;
-        // squareTris[4] = 3;
-        // squareTris[5] = 2;
-
-
-        // squareTris[6] = 0 + 3;
-        // squareTris[7] = 0 + 4;
-        // squareTris[8] = 0 + 4 + 1;
-        // squareTris[9] = 0 + 4 + 1;
-        // squareTris[10] = 0 + 2;
-        // squareTris[11] = 0 + 3;
-
         //Surface tris
         for (int x = 0, ti = 0; x < terrainWidth; x++) {
             for (int y = 0; y < terrainDepth; y++, ti +=6) {
-                surfaceTris[ti] = y * 4 + x * terrainWidth * 4;
-                surfaceTris[ti + 1] = y * 4 + 2 + x * terrainWidth * 4;
-                surfaceTris[ti + 2] = y * 4 + 1 + x * terrainWidth * 4;
+                surfaceTris[ti] = y * 4 + x * terrainDepth * 4;
+                surfaceTris[ti + 1] = y * 4 + 2 + x * terrainDepth * 4;
+                surfaceTris[ti + 2] = y * 4 + 1 + x * terrainDepth * 4;
 
-                surfaceTris[ti+3] = y * 4 + x * terrainWidth * 4;
-                surfaceTris[ti + 4] = y * 4 + 3 + x * terrainWidth * 4;
-                surfaceTris[ti + 5] = y * 4 + 2 + x * terrainWidth * 4;
+                surfaceTris[ti+3] = y * 4 + x * terrainDepth * 4;
+                surfaceTris[ti + 4] = y * 4 + 3 + x * terrainDepth * 4;
+                surfaceTris[ti + 5] = y * 4 + 2 + x * terrainDepth * 4;
             }
         }
 
         //Side tris
         for (int x = 0, ti = 0; x < terrainWidth-1; x++) {
             for (int y = 0; y < terrainDepth; y++, ti += 6) {
-                sideTris[ti] = y * 4 + 1 + x * terrainWidth * 4;
-                sideTris[ti+1] = y * 4 + 2 + x * terrainWidth * 4;
-                sideTris[ti+2] = y * 4 + 3 + (x+1) * terrainWidth * 4;
+                sideTris[ti] = y * 4 + 1 + x * terrainDepth * 4;
+                sideTris[ti+1] = y * 4 + 2 + x * terrainDepth * 4;
+                sideTris[ti+2] = y * 4 + 3 + (x+1) * terrainDepth * 4;
 
-                sideTris[ti+3] = y * 4 + 1 + x * terrainWidth * 4;
-                sideTris[ti+4] = y * 4 + 3 + (x+1) * terrainWidth * 4;
-                sideTris[ti+5] = y * 4 + (x+1) * terrainWidth * 4;
+                sideTris[ti+3] = y * 4 + 1 + x * terrainDepth * 4;
+                sideTris[ti+4] = y * 4 + 3 + (x+1) * terrainDepth * 4;
+                sideTris[ti+5] = y * 4 + (x+1) * terrainDepth * 4;
             }
         }
 
         //Depth tris
         for (int x = 0, ti = 0; x < terrainWidth; x++) {
             for (int y = 0; y < terrainDepth-1; y++, ti += 6) {
-                depthTris[ti] = y * 4 + 2 + x * terrainWidth * 4;
-                depthTris[ti+1] = y * 4 + 3 + x * terrainWidth * 4;
-                depthTris[ti+2] = y * 4 + 3 + 1 + (x * terrainWidth * 4);
+                depthTris[ti] = y * 4 + 2 + x * terrainDepth * 4;
+                depthTris[ti+1] = y * 4 + 3 + x * terrainDepth * 4;
+                depthTris[ti+2] = y * 4 + 3 + 1 + (x * terrainDepth * 4);
 
-                depthTris[ti+3] = y * 4 + 2 + x * terrainWidth * 4;
-                depthTris[ti+4] = y * 4 + 3 + 1 + (x * terrainWidth * 4);
-                depthTris[ti+5] = y * 4 + 3 + 2 + (x * terrainWidth * 4);
+                depthTris[ti+3] = y * 4 + 2 + x * terrainDepth * 4;
+                depthTris[ti+4] = y * 4 + 3 + 1 + (x * terrainDepth * 4);
+                depthTris[ti+5] = y * 4 + 3 + 2 + (x * terrainDepth * 4);
             }
         }
 
@@ -150,12 +122,12 @@ public class CubeAnimatedPerlin : MonoBehaviour {
         mesh.triangles = triList.ToArray();
         mesh.uv = newUV;
         mesh.RecalculateNormals();
-        Debug.Log("Surface tris length: " + surfaceTris.Length);
-        Debug.Log("Side tris length: " + sideTris.Length);
-        Debug.Log("DepthTris length: " + depthTris.Length);
-        Debug.Log("Triangles length: " + triList.Count);
-        // for (int i = 0; i < sideTris.Length; i++) {
-        //     Debug.Log("Side triangle index " + i + " : " + sideTris[i]);
+        // Debug.Log("Surface tris length: " + surfaceTris.Length);
+        // Debug.Log("Side tris length: " + sideTris.Length);
+        // Debug.Log("DepthTris length: " + depthTris.Length);
+        // Debug.Log("Triangles length: " + triList.Count);
+        // for (int i = 0; i < depthTris.Length; i++) {
+        //     Debug.Log("Side triangle index " + i + " : " + depthTris[i]);
         // };
     }
 
@@ -170,6 +142,7 @@ public class CubeAnimatedPerlin : MonoBehaviour {
         squareVertices = ConvertVertsToSquaredUnitVerts(newVertices);
         mesh.vertices = squareVertices;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
 
 
 
@@ -191,7 +164,7 @@ public class CubeAnimatedPerlin : MonoBehaviour {
         for (int oct = 1; oct < octaves + 1; oct++) {
             for (int x = 0; x < mapToPopulate.GetLength(0); x++) {
                 for (int y = 0; y < mapToPopulate.GetLength(1); y++) {
-                    mapToPopulate[x, y] += (mapAmplitude / oct) * (noise.GetPerlin((oct) * (x + animationPosition.x), (oct) * y + animationPosition.y));
+                    mapToPopulate[x, y] += (mapAmplitude / oct) * (noise.GetPerlinFractal((oct) * (x + animationPosition.x), (oct) * y + animationPosition.y));
                 }
             }
         }
